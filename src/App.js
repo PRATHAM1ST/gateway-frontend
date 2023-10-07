@@ -8,8 +8,8 @@ function App() {
   return (
   <>
   {/* <HomePage/> */}
-    {/* <NewTeams /> */}
-    <OnboardTeamMember />
+    <NewTeams />
+    {/* <OnboardTeamMember /> */}
   </>
   );
 }

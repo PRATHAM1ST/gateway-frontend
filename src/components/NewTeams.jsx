@@ -17,6 +17,12 @@ const NewTeams = () => {
                         <input type="text" name="TeamName" />
                     </div>
                     <div>
+                        <label>
+                            Team Desc:
+                        </label>
+                        <input type="text" name="TeamDesc" />
+                    </div>
+                    <div>
                         <button>Cancel</button>
                         <button>Continue</button>
                     </div>
