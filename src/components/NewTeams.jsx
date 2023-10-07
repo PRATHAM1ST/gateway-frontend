@@ -1,33 +1,38 @@
+import { MDBBtn, MDBCardBody, MDBCol, MDBContainer, MDBInput, MDBRow } from 'mdb-react-ui-kit'
 import React from 'react'
 
 const NewTeams = () => {
     return (
         <>
-            <div>
+            <div className='w-25 mx-auto text-center mt-4'>
                 <h1>Create a new Team</h1>
-                <p>Create a new team to collaborate with users.</p>
-                <span>step 1 of 2</span>
+                <small>Create a new team to collaborate with users.</small>
             </div>
-            <div>
+            <MDBCardBody className='w-25 mx-auto'>
+                <p className='mt-4'>STEP 1 of 2</p>
                 <form>
-                    <div>
+                    <MDBRow>
                         <label>
                             Team Name:
                         </label>
-                        <input type="text" name="TeamName" />
-                    </div>
-                    <div>
+                        <MDBInput type="text" name="TeamName" />
+                    </MDBRow>
+                    <MDBRow>
                         <label>
                             Team Desc:
                         </label>
-                        <input type="text" name="TeamDesc" />
-                    </div>
-                    <div>
-                        <button>Cancel</button>
-                        <button>Continue</button>
-                    </div>
+                        <MDBInput type="text" name="TeamDesc" />
+                    </MDBRow>
+                    <MDBRow className="mt-4 mx-auto">
+                        <MDBCol>
+                            <MDBBtn>Cancel</MDBBtn>
+                        </MDBCol>
+                        <MDBCol>
+                            <MDBBtn>Continue</MDBBtn>
+                        </MDBCol>
+                    </MDBRow>
                 </form>
-            </div>
+            </MDBCardBody>
         </>
     )
 }
