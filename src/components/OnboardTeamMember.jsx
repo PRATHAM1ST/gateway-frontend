@@ -1,4 +1,4 @@
-import { MDBCardBody, MDBRow } from 'mdb-react-ui-kit';
+import { MDBBtn, MDBCardBody, MDBDropdown, MDBDropdownItem, MDBDropdownMenu, MDBDropdownToggle, MDBRow } from 'mdb-react-ui-kit';
 import { React, useEffect, useState } from 'react'
 import Dropdown from 'react-dropdown'
 
@@ -29,17 +29,20 @@ const OnboardTeamMember = () => {
             </div>
             <MDBCardBody className='w-25 mx-auto'>
                 <p className='mt-4'>STEP 2 of 2</p>
-                <form>
                     <MDBRow>
                         user details who has created a team
                     </MDBRow>
-                    <MDBRow>
-                        <Dropdown options={users?.map((user) => user.name)} placeholder="Add Members" />;
+                    <MDBRow className='my-4'>
+                        <MDBDropdown group>
+                            <MDBDropdownToggle color='success'>Add Members</MDBDropdownToggle>
+                            <MDBDropdownMenu>
+                                {users?.map((user) => <MDBDropdownItem>{user.name}</MDBDropdownItem>)}
+                            </MDBDropdownMenu>
+                        </MDBDropdown>
                     </MDBRow>
                     <MDBRow>
-                        <button>Publish team</button>
+                        <MDBBtn>Publish team</MDBBtn>
                     </MDBRow>
-                </form>
             </MDBCardBody>
         </>
     )
