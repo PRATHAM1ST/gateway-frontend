@@ -12,7 +12,6 @@ import {
 } from "react-router-dom";
 function App() {
   return (
-    <>
     <Router>
       <SigninState>
         <Navbar/>
@@ -22,7 +21,6 @@ function App() {
         </Routes>
       </SigninState>
     </Router>
-    </>
   );
 }
 

@@ -16,7 +16,7 @@ const SigninState = (props) => {
 const [token, settoken] = useState("");
 
 useEffect(() => {
-  localStorage.setItem('token', JSON.stringify(token));
+  localStorage.setItem('token', token);
 }, [token]);
     const showModal = () => {
         setIsModalVisible(true);
@@ -35,7 +35,7 @@ useEffect(() => {
         password:""
       })
       const [otp, setotp] = useState();
-    const apiBaseUrl =  "https://dominators-backend.vercel.app"
+    const apiBaseUrl =  "http://localhost:4000"
     async function validateOtpAndLogin() {
 		try {
 			const requestBody = {
@@ -48,13 +48,18 @@ useEffect(() => {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
-						authorization: window.localStorage.getItem('token'),
+						"Authorization": localStorage.getItem('token'),
 					},
 					body: JSON.stringify(requestBody),
 				}
 			);
 			const data = await response.json();
-			if (data.success == false) {
+			if (data.success) {
+          if(!data?.data?.otpVerified){
+            localStorage.setItem('token', data.data.cookie)
+            showModal()
+          }
+          else{
                 Swal.fire({
                     title: 'You have logged in succesfully',
                     icon: 'success',
@@ -62,6 +67,9 @@ useEffect(() => {
                   });
                   showModal();
                 navigate('/CalenderUI');
+
+                localStorage.setItem('token', data.data.cookie)
+              }
             }
             else{
                 Swal.fire({
@@ -88,13 +96,13 @@ useEffect(() => {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
-						authorization: window.localStorage.getItem('token'),
+						"Authorization": localStorage.getItem('token'),
 					},
 					body: JSON.stringify(requestBody),
 				}
 			);
 			const data = await response.json();
-			if (data.success == true) {
+			if (data.success) {
                 settoken(data.data.cookie);
                 Swal.fire({
                     title: 'The User Has been created',
@@ -102,6 +110,7 @@ useEffect(() => {
                     confirmButtonText: 'OK'
                   });
                   showModal();
+                  localStorage.setItem('token', data.data.cookie)
             }
             else{
                 Swal.fire({
@@ -125,18 +134,19 @@ useEffect(() => {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
-						authorization:window.localStorage.getItem('token'),
+						"Authorization" : localStorage.getItem('token'),
 					},
 					body: JSON.stringify(requestBody),
 				}
 			);
 			const data = await response.json();
-			if (data.success == true) {
+			if (data.success) {
                 Swal.fire({
                     title: 'The User Has been created',
                     icon: 'success',
                     confirmButtonText: 'OK'
                   });
+                  localStorage.setItem('token', data.data.cookie)
                 //   showModal();
                 navigate('/CalenderUI');
             }
