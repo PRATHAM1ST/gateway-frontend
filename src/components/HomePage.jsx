@@ -1,7 +1,7 @@
 import React from "react";
 import Lottie from "lottie-react";
 import { useState } from "react";
-import { Modal, Button } from 'antd';
+import { Modal, Button, Input } from 'antd';
 import {
   MDBContainer,
   MDBCol,
@@ -21,7 +21,8 @@ const HomePage = () => {
     loginInformation,
     setloginInformation,
     showModal,
-    validateOtpAndLogin
+    validateOtpAndLogin,
+    otpVerification
   } =
     useContext(signincontext);
   const handleInputChange = (e) => {
@@ -48,7 +49,7 @@ const HomePage = () => {
 
 const footer = (
   <div>
-     <Button key="back" onClick={validateOtpAndLogin}>
+     <Button key="back" onClick={otpVerification}>
         Validate
       </Button>
       <Button key="submit" type="primary" onClick={handleCancel}>
@@ -78,22 +79,7 @@ const footer = (
         />
       </Modal>
     </div>
-      <div className="brand-name" style={{ backgroundColor: "#222222" }}>
-        <main class="textcontainer">
-          <div>Schedule your meeting </div>
-          <section class="animation">
-            <div class="first">
-              <div className="animated-text">With Dominators</div>
-            </div>
-            <div class="second">
-              <div className="animated-text">As per your requirements</div>
-            </div>
-            <div class="third">
-              <div className="animated-text">With chat bot</div>
-            </div>
-          </section>
-        </main>
-      </div>
+     
       <div className="container">
         <MDBContainer fluid className="p-3 my-5">
           <MDBRow>
@@ -123,6 +109,18 @@ const footer = (
                       value={userSignUp.name}
                       onChange={handleInputChange}
                     />:""}
+                    </MDBCol>
+                    <MDBCol>
+                   {
+                    isUseronSignup? <MDBInput
+                    wrapperClass="mb-4"
+                    label="username"
+                    id="username"
+                    type="text"
+                    value={userSignUp.username}
+                    onChange={handleInputChange}
+                  />:""
+                   }
                     </MDBCol>
                   </MDBRow>
                   <MDBInput
@@ -159,7 +157,7 @@ const footer = (
                       type="button"
                       className="btn btn-success"
                       style={{ textAlign: "center", width: "100%" }}
-                      onClick={showModal}
+                     onClick={validateOtpAndLogin}
                     >
                       Log in
                     </button>

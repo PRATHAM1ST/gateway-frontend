@@ -2,12 +2,22 @@ import React from "react";
 import Signincontext from "./signinContext";
 import { useState } from "react";
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from "react";
+
 const SigninState = (props) => {
     const [userSignUp, setUserSignUp] = useState({
         name:"",
         email:"",
-        password:""
+        password:"",
+        username:""
     });
+    const navigate = useNavigate();
+const [token, settoken] = useState("");
+
+useEffect(() => {
+  localStorage.setItem('token', JSON.stringify(token));
+}, [token]);
     const showModal = () => {
         setIsModalVisible(true);
       };
@@ -29,10 +39,8 @@ const SigninState = (props) => {
     async function validateOtpAndLogin() {
 		try {
 			const requestBody = {
-
-				email: userSignUp.email,
-                password:userSignUp.password,
-                otp:otp
+				email: loginInformation.email,
+                password:loginInformation.password,
 			};
 			const response = await fetch(
 				`${apiBaseUrl}/auth/signin`,
@@ -40,23 +48,24 @@ const SigninState = (props) => {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
-						authorization: `Token ${window.localStorage.getItem('token')}`,
+						authorization: window.localStorage.getItem('token'),
 					},
 					body: JSON.stringify(requestBody),
 				}
 			);
 			const data = await response.json();
-			if (data.success == true) {
+			if (data.success == false) {
                 Swal.fire({
                     title: 'You have logged in succesfully',
                     icon: 'success',
                     confirmButtonText: 'OK'
                   });
-                //   showModal();
+                  showModal();
+                navigate('/CalenderUI');
             }
             else{
                 Swal.fire({
-                    title: 'Some error occured',
+                    title: 'Wrong Credentials',
                     icon: 'error',
                     confirmButtonText: 'OK'
                   });
@@ -70,7 +79,8 @@ const SigninState = (props) => {
 			const requestBody = {
 				name: userSignUp.name,
 				email: userSignUp.email,
-                password:userSignUp.password
+                password:userSignUp.password,
+                username:userSignUp.username
 			};
 			const response = await fetch(
 				`${apiBaseUrl}/auth/signup`,
@@ -78,7 +88,44 @@ const SigninState = (props) => {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
-						authorization: `Token ${window.localStorage.getItem('token')}`,
+						authorization: window.localStorage.getItem('token'),
+					},
+					body: JSON.stringify(requestBody),
+				}
+			);
+			const data = await response.json();
+			if (data.success == true) {
+                settoken(data.data.cookie);
+                Swal.fire({
+                    title: 'The User Has been created',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                  });
+                  showModal();
+            }
+            else{
+                Swal.fire({
+                    title: 'Some error occured',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                  });
+            }
+		} catch (error) {
+			console.log('Some Server side error occured: ', error.message);
+		}
+	}
+    async function otpVerification() {
+		try {
+			const requestBody = {
+				otp
+			};
+			const response = await fetch(
+				`${apiBaseUrl}/auth/verify`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						authorization:window.localStorage.getItem('token'),
 					},
 					body: JSON.stringify(requestBody),
 				}
@@ -91,6 +138,7 @@ const SigninState = (props) => {
                     confirmButtonText: 'OK'
                   });
                 //   showModal();
+                navigate('/CalenderUI');
             }
             else{
                 Swal.fire({
@@ -108,7 +156,9 @@ const SigninState = (props) => {
         ,otp,setotp,
         loginInformation,
         setloginInformation,
-        validateOtpAndLogin
+        validateOtpAndLogin,
+        otpVerification,
+        token, settoken
         }}>
             {props.children}
         </Signincontext.Provider>
