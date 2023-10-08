@@ -1,5 +1,7 @@
 import React from "react";
 import Lottie from "lottie-react";
+import { useState } from "react";
+import { Modal, Button } from 'antd';
 import {
   MDBContainer,
   MDBCol,
@@ -12,14 +14,73 @@ import {
   MDBCard,
 } from "mdb-react-ui-kit";
 import signInpage from "../assets/signInpage.json";
+import { useContext } from "react";
+import signincontext from "../context/signin/signinContext";
 const HomePage = () => {
+  const { userSignUp, setUserSignUp, userAuthenticate ,otp,setotp,handleOk,handleCancel,isModalVisible,
+    loginInformation,
+    setloginInformation,
+    showModal,
+    validateOtpAndLogin
+  } =
+    useContext(signincontext);
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+  
+  if(isUseronSignup){
+    setUserSignUp((prevUserSignUp) => ({
+      ...prevUserSignUp,
+      [id]: value,
+    }));
+  }
+  else{
+    setloginInformation((prevUserSignUp) => ({
+      ...prevUserSignUp,
+      [id]: value,
+    }));
+  }
+  };
+  const handleotp = (e) =>{
+    const newOtp = e.target.value;
+    setotp(newOtp);
+  }
+  const [isUseronSignup, setisUseronSignup] = useState(true);
+
+const footer = (
+  <div>
+     <Button key="back" onClick={validateOtpAndLogin}>
+        Validate
+      </Button>
+      <Button key="submit" type="primary" onClick={handleCancel}>
+        Cancel
+      </Button>
+  </div>
+)
+
   return (
     <>
+
+<div>
+   
+      <Modal
+        title="Enter Otp to continue"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={footer}
+      >
+        <input
+        name="otp"
+        id="otp"
+        value={otp}
+        onChange={handleotp}
+        style={{width:"100%"}}
+        />
+      </Modal>
+    </div>
       <div className="brand-name" style={{ backgroundColor: "#222222" }}>
         <main class="textcontainer">
-          <p class="textforanimation" style={{ marginTop: "20px" }}>
-            Schedule your Meeting
-          </p>
+          <div>Schedule your meeting </div>
           <section class="animation">
             <div class="first">
               <div className="animated-text">With Dominators</div>
@@ -49,50 +110,79 @@ const HomePage = () => {
                 id="radius-shape-2"
                 className="position-absolute shadow-5-strong"
               ></div>
-
-              <MDBCard className="my-5 bg-glass" style={{width:"70%"}}>
+              <MDBCard className="my-5 bg-glass" style={{ width: "70%" }}>
                 <MDBCardBody className="p-5">
                   <MDBRow>
                     <MDBCol col="6">
+               {isUseronSignup?
                       <MDBInput
-                        wrapperClass="mb-4"
-                        label="First name"
-                        id="form1"
-                        type="text"
-                      />
-                    </MDBCol>
-
-                    <MDBCol col="6">
-                      <MDBInput
-                        wrapperClass="mb-4"
-                        label="Last name"
-                        id="form2"
-                        type="text"
-                      />
+                      wrapperClass="mb-4"
+                      label="Name"
+                      id="name"
+                      type="text"
+                      value={userSignUp.name}
+                      onChange={handleInputChange}
+                    />:""}
                     </MDBCol>
                   </MDBRow>
-
                   <MDBInput
                     wrapperClass="mb-4"
                     label="Email"
-                    id="form3"
+                    id="email"
                     type="email"
+                    value={isUseronSignup?userSignUp.email:loginInformation.email}
+                    onChange={handleInputChange}
                   />
-                  <MDBInput
-                    wrapperClass="mb-4"
-                    label="Password"
-                    id="form4"
-                    type="password"
-                  />
-
-
-                  <MDBBtn className="w-100 mb-4" size="md">
-                    sign up
-                  </MDBBtn>
-
+                       <MDBInput
+                      wrapperClass="mb-4"
+                      label="Password"
+                      id="password"
+                      type="password"
+                      value={isUseronSignup?userSignUp.password:loginInformation.password}
+                      onChange={handleInputChange}
+                    />
+               
+                  {isUseronSignup ? (
+                    <MDBBtn
+                      className="w-100 mb-4"
+                      size="md"
+                      onClick={userAuthenticate}
+                    >
+                      sign up
+                    </MDBBtn>
+                  ) : (
+                    " "
+                  )}
+                  <hr />
+                  {!isUseronSignup ? (
+                    <button
+                      type="button"
+                      className="btn btn-success"
+                      style={{ textAlign: "center", width: "100%" }}
+                      onClick={showModal}
+                    >
+                      Log in
+                    </button>
+                  ) : (
+                    ""
+                  )}
+                  {isUseronSignup ? (
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      style={{ textAlign: "center", width: "100%" }}
+                      onClick={() => {
+                        setisUseronSignup(false);
+                      }}
+                    >
+                      Or Log in
+                    </button>
+                  ) : (
+                    ""
+                  )}
+                  <hr />
                   <div className="text-center">
                     <p>or sign up with:</p>
-
                     <MDBBtn
                       tag="a"
                       color="none"
@@ -101,7 +191,6 @@ const HomePage = () => {
                     >
                       <MDBIcon fab icon="facebook-f" size="sm" />
                     </MDBBtn>
-
                     <MDBBtn
                       tag="a"
                       color="none"
@@ -110,7 +199,6 @@ const HomePage = () => {
                     >
                       <MDBIcon fab icon="twitter" size="sm" />
                     </MDBBtn>
-
                     <MDBBtn
                       tag="a"
                       color="none"
